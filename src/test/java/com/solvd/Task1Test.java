@@ -1,7 +1,12 @@
 package com.solvd;
 
-import com.solvd.pages.HomePage;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -9,33 +14,43 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.net.MalformedURLException;
+import com.solvd.pages.HomePage;
+import com.solvd.pages.SearchPage;
 
 public class Task1Test {
     static final Logger logger = LoggerFactory.getLogger(Task1Test.class);
 
-    DriverPool driverPool;
+    WebDriver driver;
 
     @BeforeTest
-    public void beforeTest() {
-        driverPool = DriverPool.getDriverPool();
+    public void beforeTest() throws MalformedURLException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("start-maximized");
+        options.addArguments("--auto-open-devtools-for-tabs");
+        driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
     }
 
     @Test
-    public void mainMenuSeleniumTest() throws MalformedURLException, InterruptedException {
-
-        WebDriver driver = driverPool.getDriver();
-
+    public void mainMenuSeleniumTest() {
         HomePage startingHomePage = new HomePage(driver);
 
-        startingHomePage.hoverHome();
+        startingHomePage.hoverOverHomeButton();
         Assert.assertTrue(startingHomePage.isHomeMenuVisible(), "Failed to display main menu");
+    }
 
-        driverPool.releaseDriver(driver);
+    @Test
+    public void searchForProducts() {
+        HomePage startingHomePage = new HomePage(driver);
+
+        String productName = "bronzer";
+        startingHomePage.fillSearch(productName);
+        SearchPage searchPage = startingHomePage.clickSearch();
+        Assert.assertTrue(searchPage.checkProductName(productName), "Failed to find only searched product");
     }
 
     @AfterTest
     public void afterTest() {
-        driverPool.close();
+        driver.quit();
     }
 }
