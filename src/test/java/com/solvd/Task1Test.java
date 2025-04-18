@@ -32,21 +32,23 @@ public class Task1Test {
     }
 
     @Test
-    public void mainMenuSeleniumTest() {
+    public void displayMainMenuTest() {
         HomePage startingHomePage = new HomePage(driver);
+        startingHomePage.navigateToHomePage();
 
         startingHomePage.hoverOverHomeButton();
         Assert.assertTrue(startingHomePage.isHomeMenuVisible(), "Failed to display main menu");
     }
 
     @Test
-    public void searchForProducts() {
+    public void searchForProductsTest() {
         HomePage startingHomePage = new HomePage(driver);
+        startingHomePage.navigateToHomePage();
 
         String productName = "bronzer";
-        startingHomePage.fillSearch(productName);
+        startingHomePage.enterSearchQuery(productName);
         SearchPage searchPage = startingHomePage.clickSearch();
-        Assert.assertTrue(searchPage.checkProductName(productName), "Failed to find only searched product");
+        Assert.assertTrue(searchPage.areAllProductNamesMatch(productName), "Failed to find only searched product");
     }
 
     @AfterTest

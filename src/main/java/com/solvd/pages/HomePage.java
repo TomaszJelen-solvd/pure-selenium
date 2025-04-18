@@ -9,7 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 public class HomePage {
     WebDriver driver;
 
-    @FindBy(css = "a[class*='menu_home'][class*='active']")
+    @FindBy(css = "a.menu_home")
     WebElement homeButton;
 
     @FindBy(id = "main_menu")
@@ -22,9 +22,13 @@ public class HomePage {
     WebElement searchButton;
 
     public HomePage(WebDriver driver) {
-        driver.get("https://automationteststore.com/");
+
         this.driver = driver;
         PageFactory.initElements(driver, this);
+    }
+
+    public void navigateToHomePage() {
+        driver.get("https://automationteststore.com/");
     }
 
     public void hoverOverHomeButton() {
@@ -36,8 +40,8 @@ public class HomePage {
         return homeMenu.isDisplayed();
     }
 
-    public void fillSearch(String fill) {
-        searchInput.sendKeys(fill);
+    public void enterSearchQuery(String query) {
+        searchInput.sendKeys(query);
     }
 
     public SearchPage clickSearch() {
