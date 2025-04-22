@@ -22,7 +22,6 @@ public class HomePage {
     WebElement searchButton;
 
     public HomePage(WebDriver driver) {
-
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }

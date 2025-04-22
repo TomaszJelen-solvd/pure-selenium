@@ -17,8 +17,9 @@ import org.testng.annotations.Test;
 import com.solvd.pages.HomePage;
 import com.solvd.pages.SearchPage;
 
-public class Task1Test {
-    static final Logger logger = LoggerFactory.getLogger(Task1Test.class);
+//Implementation of Web Automation Java Task 1
+public class SimpleWebAutomationTest {
+    static final Logger logger = LoggerFactory.getLogger(SimpleWebAutomationTest.class);
 
     WebDriver driver;
 
