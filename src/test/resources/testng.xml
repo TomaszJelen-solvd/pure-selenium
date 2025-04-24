@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="MyTestSuite">
+    <test name="Test1" parallel="methods">
+        <classes>
+            <class name="com.solvd.SimpleWebAutomationTest"/>
+        </classes>
+    </test>
+</suite>
