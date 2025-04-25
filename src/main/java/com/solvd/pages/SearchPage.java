@@ -15,15 +15,13 @@ public class SearchPage extends AbstractPage {
         super(driver);
     }
 
-//    public SearchPage(WebDriver driver) {
-//        this.driver = driver;
-//        PageFactory.initElements(driver, this);
-//    }
 
     public boolean areAllProductNamesMatching(String name) {
-        List<WebElement> displyedProductNames = productNames.stream().filter(element -> checkIfDisplayed(element)).collect(Collectors.toList());
-        for (WebElement productName : displyedProductNames) {
-            if(!getTextFrom(productName).toLowerCase().contains(name.toLowerCase())) {
+        List<WebElement> displayedProductNames = productNames.stream().filter(element -> isDisplayed(element)).collect(Collectors.toList());
+        for (WebElement productName : displayedProductNames) {
+            String productText = getText(productName);
+            logger.info("Checking name of product: {}", productText);
+            if(!productText.toLowerCase().contains(name.toLowerCase())) {
                 return false;
             }
         }

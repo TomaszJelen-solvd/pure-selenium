@@ -16,7 +16,7 @@ public abstract class AbstractTest {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     private static final ThreadLocal<WebDriver> drivers = new ThreadLocal<>();
 
-    protected WebDriver driver() {
+    protected WebDriver getDriver() {
         WebDriver driver = drivers.get();
         if (driver == null) {
             throw new IllegalStateException("Driver should have not been null.");
@@ -25,20 +25,20 @@ public abstract class AbstractTest {
     }
 
     @BeforeMethod
-    public void beforeEachTest() throws MalformedURLException {
+    public void setUp() throws MalformedURLException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("start-maximized");
         options.addArguments("--auto-open-devtools-for-tabs");
         WebDriver driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         drivers.set(driver);
-        logger.info("Driver created");
+        logger.info("WebDriver created for thread: {}", Thread.currentThread().getId());
     }
 
-    @AfterMethod
-    public void afterEachTest() {
-        driver().quit();
-        logger.info("Driver destroyed");
+    @AfterMethod(alwaysRun = true)
+    public void tearDown() {
+        getDriver().quit();
+        logger.info("WebDriver quit for thread: {}", Thread.currentThread().getId());
     }
 
 }

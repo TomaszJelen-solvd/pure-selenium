@@ -1,8 +1,8 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="MyTestSuite">
-    <test name="Test1" parallel="methods">
+    <test name="Test1" parallel="methods" thread-count="4">
         <classes>
-            <class name="com.solvd.SimpleWebAutomationTest"/>
+            <class name="com.solvd.BasicHomePageTests"/>
         </classes>
     </test>
 </suite>

@@ -28,11 +28,11 @@ public class HomePage extends AbstractPage{
     public void hoverOverHomeButton() { hoverOver(homeButton); }
 
     public boolean isHomeMenuVisible() {
-        return checkIfDisplayed(homeMenu);
+        return isDisplayed(homeMenu);
     }
 
     public void enterSearchQuery(String query) {
-        sendKeysTo(searchInput, query);
+        sendKeys(searchInput, query);
     }
 
 
