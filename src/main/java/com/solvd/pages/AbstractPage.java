@@ -13,8 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractPage {
+    public static final int TIMEOUT = 2;
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-    WebDriver driver;
+    protected WebDriver driver;
 
     public AbstractPage(WebDriver driver) {
         this.driver = driver;
@@ -22,12 +23,11 @@ public abstract class AbstractPage {
     }
 
     protected void hoverOver(WebElement element) {
-        waitUntilVisible(element);
+        waitUntilVisible(element, TIMEOUT);
         Actions action = new Actions(driver);
         action.moveToElement(element).perform();
-        logger.info("Performed hovering");
+        logger.info("Performed hovering over element: {}", element);
     }
-
 
     protected boolean isDisplayed(WebElement element) {
         logger.info("Performing display check for element: {}", element);
@@ -35,25 +35,25 @@ public abstract class AbstractPage {
     }
 
     protected void sendKeys(WebElement element, String query) {
-        waitUntilVisible(element);
+        waitUntilVisible(element, TIMEOUT);
         element.sendKeys(query);
-        logger.info("Performed sending keys");
+        logger.info("Performed sending keys to element: {}", element);
     }
 
     protected void clickElement(WebElement element) {
-        waitUntilVisible(element);
+        waitUntilVisible(element, TIMEOUT);
         element.click();
         logger.info("Performed element clicking");
     }
 
     protected String getText(WebElement element) {
         logger.info("Performed text reading");
-        waitUntilVisible(element);
+        waitUntilVisible(element, TIMEOUT);
         return element.getText();
     }
 
-    private void waitUntilVisible(WebElement element) {
-        Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(2));
-        wait.until(d -> ExpectedConditions.visibilityOf(element));
+    private void waitUntilVisible(WebElement element, int timeout) {
+        Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
+        wait.until(ExpectedConditions.visibilityOf(element));
     }
 }
