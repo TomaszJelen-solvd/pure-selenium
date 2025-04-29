@@ -9,11 +9,13 @@ import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 
 public abstract class AbstractTest {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -27,11 +29,9 @@ public abstract class AbstractTest {
         return driver;
     }
 
+    @Parameters("browser")
     @BeforeMethod
-    public void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("start-maximized");
-        options.addArguments("--auto-open-devtools-for-tabs");
+    public void setUp(String browser) {
         WebDriver driver = null;
         try {
             Properties properties = new Properties();
@@ -40,7 +40,18 @@ public abstract class AbstractTest {
             } catch (IOException e) {
                 throw new RuntimeException("Failed to load application properties");
             }
-            driver = new RemoteWebDriver(new URL(properties.getProperty("driverUrl")), options);
+            if (browser.equalsIgnoreCase("chrome")) {
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("start-maximized");
+                chromeOptions.addArguments("--auto-open-devtools-for-tabs");
+                driver = new RemoteWebDriver(new URL(properties.getProperty("driverUrl")), chromeOptions);
+
+            } else if (browser.equalsIgnoreCase("firefox")) {
+                FirefoxOptions firefoxOptions = new FirefoxOptions();
+                firefoxOptions.addArguments("--kiosk");
+//                firefoxOptions.addArguments("--auto-open-devtools-for-tabs");
+                driver = new RemoteWebDriver(new URL(properties.getProperty("driverUrl")), firefoxOptions);
+            }
         } catch (MalformedURLException e) {
             logger.info("Failed to create WebDriver for thread: {}", Thread.currentThread().getId());
             throw new RuntimeException(e);
