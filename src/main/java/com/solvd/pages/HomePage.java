@@ -1,10 +1,17 @@
 package com.solvd.pages;
 
+import com.solvd.Main;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class HomePage extends AbstractPage{
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+public class HomePage extends AbstractPage {
     @FindBy(css = "a.menu_home")
     WebElement homeButton;
 
@@ -17,15 +24,26 @@ public class HomePage extends AbstractPage{
     @FindBy(className = "button-in-search")
     WebElement searchButton;
 
+    private String url;
+
     public HomePage(WebDriver driver) {
         super(driver);
+        Properties properties = new Properties();
+        try (InputStream inStream = Main.class.getResourceAsStream("/application.properties")) {
+            properties.load(inStream);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load application properties");
+        }
+        url = properties.getProperty("homeUrl");
     }
 
     public void navigateToHomePage() {
-        driver.get("https://automationteststore.com/");
+        driver.get(url);
     }
 
-    public void hoverOverHomeButton() { hoverOver(homeButton); }
+    public void hoverOverHomeButton() {
+        hoverOver(homeButton);
+    }
 
     public boolean isHomeMenuVisible() {
         return isDisplayed(homeMenu);

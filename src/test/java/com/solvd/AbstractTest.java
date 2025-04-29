@@ -1,8 +1,12 @@
 package com.solvd;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -19,17 +23,29 @@ public abstract class AbstractTest {
     protected WebDriver getDriver() {
         WebDriver driver = drivers.get();
         if (driver == null) {
-            throw new IllegalStateException("Driver should have not been null.");
+            throw new IllegalStateException("Driver for thread: " + Thread.currentThread().getId() + " should have not been null.");
         }
         return driver;
     }
 
     @BeforeMethod
-    public void setUp() throws MalformedURLException {
+    public void setUp() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("start-maximized");
         options.addArguments("--auto-open-devtools-for-tabs");
-        WebDriver driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
+        WebDriver driver = null;
+        try {
+            Properties properties = new Properties();
+            try (InputStream inStream = Main.class.getResourceAsStream("/application.properties")) {
+                properties.load(inStream);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to load application properties");
+            }
+            driver = new RemoteWebDriver(new URL(properties.getProperty("driverUrl")), options);
+        } catch (MalformedURLException e) {
+            logger.info("Failed to create WebDriver for thread: {}", Thread.currentThread().getId());
+            throw new RuntimeException(e);
+        }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         drivers.set(driver);
         logger.info("WebDriver created for thread: {}", Thread.currentThread().getId());

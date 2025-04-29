@@ -2,7 +2,7 @@
 <suite name="MyTestSuite">
     <test name="Test1" parallel="methods" thread-count="4">
         <classes>
-            <class name="com.solvd.BasicHomePageTests"/>
+            <class name="com.solvd.HomeTest"/>
         </classes>
     </test>
 </suite>

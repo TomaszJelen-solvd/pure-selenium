@@ -7,18 +7,18 @@ import com.solvd.pages.HomePage;
 import com.solvd.pages.SearchPage;
 
 //Implementation of Web Automation Java Task 1
-public class BasicHomePageTests extends AbstractTest {
+public class HomeTest extends AbstractTest {
     @Test
-    public void checkIfHoveringDisplaysMainMenuTest() {
+    public void testDisplayMainMenuOnHover() {
         HomePage homePage = new HomePage(getDriver());
         homePage.navigateToHomePage();
 
         homePage.hoverOverHomeButton();
-        Assert.assertTrue(homePage.isHomeMenuVisible(), "Failed to display main menu");
+        Assert.assertTrue(homePage.isHomeMenuVisible(), "Main menu was not visible after hovering over Home button");
     }
 
     @Test
-    public void checkIfSearchedProductsHaveLookedForNamesTest() {
+    public void testDisplaySearchedProducts() {
         HomePage homePage = new HomePage(getDriver());
         homePage.navigateToHomePage();
 
