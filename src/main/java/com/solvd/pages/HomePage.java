@@ -33,6 +33,7 @@ public class HomePage extends AbstractPage {
     @FindBy(className = "productcart")
     List<WebElement> productNames;
 
+
     private String url;
 
     public HomePage(WebDriver driver) {
@@ -44,6 +45,7 @@ public class HomePage extends AbstractPage {
             throw new RuntimeException("Failed to load application properties");
         }
         url = properties.getProperty("homeUrl");
+
     }
 
     public void navigateToHomePage() {
