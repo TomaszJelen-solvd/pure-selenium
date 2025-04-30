@@ -1,30 +1,37 @@
 package com.solvd.pages;
 
+
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
-public class SearchPage {
-    WebDriver driver;
-
-    @FindBy(id = "prdocutname")
+public class SearchPage extends AbstractPage {
+    @FindBy(className = "prdocutname")
     List<WebElement> productNames;
 
     public SearchPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
-    public boolean areAllProductNamesMatch(String name) {
-        for (WebElement productName : productNames) {
-            if(!productName.getText().toLowerCase().contains(name.toLowerCase())) {
+
+    public boolean areAllProductNamesMatching(String name) {
+        if(StringUtils.isEmpty(name)) {
+            logger.info("Attempted check with empty name of product");
+            return false;
+        }
+        List<WebElement> displayedProductNames = productNames.stream().filter(this::isDisplayed).toList();
+        for (WebElement productName : displayedProductNames) {
+            String productText = getText(productName);
+            logger.info("Checking name of product: {}", productText);
+            if(!productText.toLowerCase().contains(name.toLowerCase())) {
                 return false;
             }
         }
         return true;
     }
+
 
 }
