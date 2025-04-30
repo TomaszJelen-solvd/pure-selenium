@@ -17,6 +17,7 @@ public class HomeTest extends AbstractTest {
         Assert.assertTrue(homePage.isHomeMenuVisible(), "Main menu was not visible after hovering over Home button");
     }
 
+//    CID1
     @Test
     public void testDisplaySearchedProducts() {
         HomePage homePage = new HomePage(getDriver());

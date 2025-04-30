@@ -5,11 +5,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.List;
 
 public class HomePage extends AbstractPage {
     @FindBy(css = "a.menu_home")
@@ -18,11 +17,21 @@ public class HomePage extends AbstractPage {
     @FindBy(id = "main_menu")
     WebElement homeMenu;
 
+    @FindBy(xpath = "//a[text()='Login or register']")
+    WebElement loginButton;
+
+
     @FindBy(id = "filter_keyword")
     WebElement searchInput;
 
     @FindBy(className = "button-in-search")
     WebElement searchButton;
+
+    @FindBy(className = "block_7")
+    WebElement cartButton;
+
+    @FindBy(className = "productcart")
+    List<WebElement> productNames;
 
 
     private String url;
@@ -55,6 +64,19 @@ public class HomePage extends AbstractPage {
         sendKeys(searchInput, query);
     }
 
+    public void addProductToCart(int index) {
+        clickElement(productNames.get(index));
+    }
+
+    public LoginPage clickLogin() {
+        clickElement(loginButton);
+        return new LoginPage(driver);
+    }
+
+    public CartPage clickCart() {
+        clickElement(cartButton);
+        return new CartPage(driver);
+    }
 
     public SearchPage clickSearch() {
         clickElement(searchButton);

@@ -3,6 +3,8 @@
     <test name="Test1" parallel="methods" thread-count="4">
         <classes>
             <class name="com.solvd.HomeTest"/>
+            <class name="com.solvd.LoginTest"/>
+            <class name="com.solvd.CartTest"/>
         </classes>
     </test>
 </suite>

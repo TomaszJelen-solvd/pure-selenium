@@ -52,6 +52,12 @@ public abstract class AbstractPage {
         return element.getText();
     }
 
+    protected String getValue(WebElement element) {
+        logger.info("Performed value reading");
+        waitUntilVisible(element, TIMEOUT);
+        return element.getDomAttribute("value");
+    }
+
     private void waitUntilVisible(WebElement element, int timeout) {
         Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
         wait.until(ExpectedConditions.visibilityOf(element));
