@@ -4,9 +4,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class AccountPage extends AbstractPage{
+public class AccountPage extends AbstractPage {
     @FindBy(className = "subtext")
-    WebElement userName;
+    private WebElement userName;
 
     public AccountPage(WebDriver driver) {
         super(driver);

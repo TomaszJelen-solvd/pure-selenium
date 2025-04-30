@@ -1,12 +1,11 @@
 package com.solvd;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Properties;
 
+import com.solvd.util.PropertiesLoader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -34,12 +33,7 @@ public abstract class AbstractTest {
     public void setUp(String browser) {
         WebDriver driver = null;
         try {
-            Properties properties = new Properties();
-            try (InputStream inStream = Main.class.getResourceAsStream("/application.properties")) {
-                properties.load(inStream);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to load application properties");
-            }
+            Properties properties = PropertiesLoader.getProperties();
             if (browser.equalsIgnoreCase("chrome")) {
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("start-maximized");

@@ -16,10 +16,10 @@ public class MyListener implements ITestListener {
         String testName = result.getMethod().getMethodName();
         Object currentClass = result.getInstance();
         WebDriver webdriver = ((AbstractTest) currentClass).getDriver();
-        TakesScreenshot screenshot =((TakesScreenshot)webdriver);
-        File SrcFile=screenshot.getScreenshotAs(OutputType.FILE);
+        TakesScreenshot screenshot = ((TakesScreenshot) webdriver);
+        File SrcFile = screenshot.getScreenshotAs(OutputType.FILE);
         try {
-            FileUtils.copyFile(SrcFile, new File("screenshot" + testName +".png"));
+            FileUtils.copyFile(SrcFile, new File("screenshot" + testName + ".png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

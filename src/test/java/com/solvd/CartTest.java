@@ -27,27 +27,25 @@ public class CartTest extends AbstractTest{
         homePage.addProductToCart(0);
         homePage.addProductToCart(3);
         CartPage cartPage = homePage.clickCart();
-        Assert.assertEquals(cartPage.getProductName(0), "Skinsheen Bronzer Stick", "Failed to display correct product");
-        Assert.assertEquals(cartPage.getProductName(1), "Absolute Anti-Age Spot Replenishing Unifying TreatmentSPF 15", "Failed to display correct product");
-        Assert.assertEquals(cartPage.getProductQuantity(0), "1", "Failed to display correct product quantity");
-        Assert.assertEquals(cartPage.getProductQuantity(1), "1", "Failed to display correct product quantity");
+        assertProducts(cartPage, "Skinsheen Bronzer Stick", "1", "Absolute Anti-Age Spot Replenishing Unifying TreatmentSPF 15", "1");
     }
 
-
-//    CID3
+    //    CID3
     @Test
     public void testDisplayDiffrentMultipleChosenProductsInCart() {
         HomePage homePage = new HomePage(getDriver());
         homePage.navigateToHomePage();
 
-        homePage.addProductToCart(0);
-        homePage.addProductToCart(0);
+        homePage.addSeveralProductsToCart(0, 2);
         homePage.addProductToCart(3);
         CartPage cartPage = homePage.clickCart();
-        Assert.assertEquals(cartPage.getProductName(0), "Skinsheen Bronzer Stick", "Failed to display correct product");
-        Assert.assertEquals(cartPage.getProductName(1), "Absolute Anti-Age Spot Replenishing Unifying TreatmentSPF 15", "Failed to display correct product");
-        Assert.assertEquals(cartPage.getProductQuantity(0), "2", "Failed to display correct product quantity");
-        Assert.assertEquals(cartPage.getProductQuantity(1), "1", "Failed to display correct product quantity");
+        assertProducts(cartPage, "Skinsheen Bronzer Stick", "2", "Absolute Anti-Age Spot Replenishing Unifying TreatmentSPF 15", "1");
     }
 
+    private static void assertProducts(CartPage cartPage, String firstProduct, String firstQuantity, String secondProduct, String secondQuantity) {
+        Assert.assertEquals(cartPage.getProductName(0), firstProduct, "Failed to display correct product");
+        Assert.assertEquals(cartPage.getProductName(1), secondProduct, "Failed to display correct product");
+        Assert.assertEquals(cartPage.getProductQuantity(0), firstQuantity, "Failed to display correct product quantity");
+        Assert.assertEquals(cartPage.getProductQuantity(1), secondQuantity, "Failed to display correct product quantity");
+    }
 }
