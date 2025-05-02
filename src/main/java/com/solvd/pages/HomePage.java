@@ -31,6 +31,7 @@ public class HomePage extends AbstractPage {
     @FindBy(className = "productcart")
     private List<WebElement> productNames;
 
+
     private String url;
 
     public HomePage(WebDriver driver) {
