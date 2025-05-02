@@ -5,47 +5,60 @@ import com.solvd.pages.HomePage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Map;
+
 public class CartTest extends AbstractTest{
-//    CID1
+    public static final Product SKINSHEEN_BRONZER_STICK = new Product("Skinsheen Bronzer Stick", 0);
+    public static final Product TREATMENT_SPF_15 = new Product("Absolute Anti-Age Spot Replenishing Unifying TreatmentSPF 15", 3);
+
+    //    CID1
     @Test
     public void testDisplayChosenProductInCart() {
         HomePage homePage = new HomePage(getDriver());
         homePage.navigateToHomePage();
 
-        homePage.addProductToCart(0);
+        homePage.addProductToCart(SKINSHEEN_BRONZER_STICK.getIndex());
         CartPage cartPage = homePage.clickCart();
-        Assert.assertEquals(cartPage.getProductName(0), "Skinsheen Bronzer Stick", "Failed to display correct product");
+        Assert.assertEquals(cartPage.getProductName(0), SKINSHEEN_BRONZER_STICK.getName(), "Failed to display correct product");
         Assert.assertEquals(cartPage.getProductQuantity(0), "1", "Failed to display correct product quantity");
     }
 
 //    CID2
     @Test
-    public void testDisplayDiffrentChosenProductsInCart() {
+    public void testDisplayDifferentChosenProductsInCart() {
         HomePage homePage = new HomePage(getDriver());
         homePage.navigateToHomePage();
 
-        homePage.addProductToCart(0);
-        homePage.addProductToCart(3);
+        homePage.addProductToCart(SKINSHEEN_BRONZER_STICK.getIndex());
+        homePage.addProductToCart(TREATMENT_SPF_15.getIndex());
         CartPage cartPage = homePage.clickCart();
-        assertProducts(cartPage, "Skinsheen Bronzer Stick", "1", "Absolute Anti-Age Spot Replenishing Unifying TreatmentSPF 15", "1");
+        assertProductsInCart(cartPage, Map.of(
+                SKINSHEEN_BRONZER_STICK.getName(), "1",
+                TREATMENT_SPF_15.getName(), "1"
+        ));
     }
 
-    //    CID3
+//    CID3
     @Test
     public void testDisplayDiffrentMultipleChosenProductsInCart() {
         HomePage homePage = new HomePage(getDriver());
         homePage.navigateToHomePage();
 
-        homePage.addSeveralProductsToCart(0, 2);
-        homePage.addProductToCart(3);
+        homePage.addSeveralProductsToCart(SKINSHEEN_BRONZER_STICK.getIndex(), 2);
+        homePage.addProductToCart(TREATMENT_SPF_15.getIndex());
         CartPage cartPage = homePage.clickCart();
-        assertProducts(cartPage, "Skinsheen Bronzer Stick", "2", "Absolute Anti-Age Spot Replenishing Unifying TreatmentSPF 15", "1");
+        assertProductsInCart(cartPage, Map.of(
+                SKINSHEEN_BRONZER_STICK.getName(), "2",
+                TREATMENT_SPF_15.getName(), "1"
+                ));
     }
 
-    private static void assertProducts(CartPage cartPage, String firstProduct, String firstQuantity, String secondProduct, String secondQuantity) {
-        Assert.assertEquals(cartPage.getProductName(0), firstProduct, "Failed to display correct product");
-        Assert.assertEquals(cartPage.getProductName(1), secondProduct, "Failed to display correct product");
-        Assert.assertEquals(cartPage.getProductQuantity(0), firstQuantity, "Failed to display correct product quantity");
-        Assert.assertEquals(cartPage.getProductQuantity(1), secondQuantity, "Failed to display correct product quantity");
+    private static void assertProductsInCart(CartPage cartPage, Map<String, String> expectedProducts) {
+        int i = 0;
+        for(Map.Entry<String, String> entry : expectedProducts.entrySet()) {
+            Assert.assertEquals(cartPage.getProductName(i), entry.getKey(), "Failed to display correct product");
+            Assert.assertEquals(cartPage.getProductQuantity(i), entry.getValue(), "Failed to display correct product quantity");
+            i++;
+        }
     }
 }
