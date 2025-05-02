@@ -2,15 +2,15 @@ package com.solvd;
 
 import com.solvd.pages.CartPage;
 import com.solvd.pages.HomePage;
+import static com.solvd.ProductService.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Map;
 
-public class CartTest extends AbstractTest{
-    public static final Product SKINSHEEN_BRONZER_STICK = new Product("Skinsheen Bronzer Stick", 0);
-    public static final Product TREATMENT_SPF_15 = new Product("Absolute Anti-Age Spot Replenishing Unifying TreatmentSPF 15", 3);
 
+
+public class CartTest extends AbstractTest {
     //    CID1
     @Test
     public void testDisplayChosenProductInCart() {
