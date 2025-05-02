@@ -1,21 +1,23 @@
 package com.solvd;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Properties;
 
+import com.solvd.util.PropertiesLoader;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 
 public abstract class AbstractTest {
+    public static final String DRIVER_URL_PROPERTY = "driverUrl";
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     private static final ThreadLocal<WebDriver> drivers = new ThreadLocal<>();
 
@@ -27,20 +29,24 @@ public abstract class AbstractTest {
         return driver;
     }
 
-    @BeforeMethod
-    public void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("start-maximized");
-        options.addArguments("--auto-open-devtools-for-tabs");
+    @Parameters("browser")
+    @BeforeMethod(alwaysRun = true)
+    public void setUp(String browser) {
         WebDriver driver = null;
         try {
-            Properties properties = new Properties();
-            try (InputStream inStream = Main.class.getResourceAsStream("/application.properties")) {
-                properties.load(inStream);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to load application properties");
+            Properties properties = PropertiesLoader.getProperties();
+            if (browser.equalsIgnoreCase("chrome")) {
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("start-maximized");
+                chromeOptions.addArguments("--auto-open-devtools-for-tabs");
+                driver = new RemoteWebDriver(new URL(properties.getProperty(DRIVER_URL_PROPERTY)), chromeOptions);
+
+            } else if (browser.equalsIgnoreCase("firefox")) {
+                FirefoxOptions firefoxOptions = new FirefoxOptions();
+                firefoxOptions.addArguments("--kiosk");
+//                firefoxOptions.addArguments("--auto-open-devtools-for-tabs");
+                driver = new RemoteWebDriver(new URL(properties.getProperty(DRIVER_URL_PROPERTY)), firefoxOptions);
             }
-            driver = new RemoteWebDriver(new URL(properties.getProperty("driverUrl")), options);
         } catch (MalformedURLException e) {
             logger.info("Failed to create WebDriver for thread: {}", Thread.currentThread().getId());
             throw new RuntimeException(e);

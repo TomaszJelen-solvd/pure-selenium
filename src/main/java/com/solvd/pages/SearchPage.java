@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SearchPage extends AbstractPage {
     @FindBy(className = "prdocutname")
-    List<WebElement> productNames;
+    private List<WebElement> productNames;
 
     public SearchPage(WebDriver driver) {
         super(driver);

@@ -23,7 +23,7 @@ public abstract class AbstractPage {
     }
 
     protected void hoverOver(WebElement element) {
-        waitUntilVisible(element, TIMEOUT);
+        waitForElementToBeVisible(element, TIMEOUT);
         Actions action = new Actions(driver);
         action.moveToElement(element).perform();
         logger.info("Performed hovering over element: {}", element);
@@ -35,30 +35,29 @@ public abstract class AbstractPage {
     }
 
     protected void sendKeys(WebElement element, String query) {
-        waitUntilVisible(element, TIMEOUT);
+        waitForElementToBeVisible(element, TIMEOUT);
         element.sendKeys(query);
         logger.info("Performed sending keys to element: {}", element);
     }
 
     protected void clickElement(WebElement element) {
-        waitUntilVisible(element, TIMEOUT);
+        waitForElementToBeVisible(element, TIMEOUT);
         element.click();
         logger.info("Performed element clicking");
     }
 
     protected String getText(WebElement element) {
-        logger.info("Performed text reading");
-        waitUntilVisible(element, TIMEOUT);
+        waitForElementToBeVisible(element, TIMEOUT);
         return element.getText();
     }
 
     protected String getValue(WebElement element) {
         logger.info("Performed value reading");
-        waitUntilVisible(element, TIMEOUT);
+        waitForElementToBeVisible(element, TIMEOUT);
         return element.getDomAttribute("value");
     }
 
-    private void waitUntilVisible(WebElement element, int timeout) {
+    private void waitForElementToBeVisible(WebElement element, int timeout) {
         Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(timeout));
         wait.until(ExpectedConditions.visibilityOf(element));
     }
